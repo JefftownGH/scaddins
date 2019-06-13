@@ -76,12 +76,14 @@
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label  Grid.Column="0" Margin="5">New Sheets</Label>
                     <Button x:Name="RemoveSheetSelection" IsEnabled="{Binding RemoveSheetSelectionIsEnabled}" Grid.Column="1" Margin="5">Remove Selection</Button>
                     <Button x:Name="CopySheetSelection" Grid.Column="2" IsEnabled="{Binding CopySheetSelectionIsEnabled}" Margin="5">Copy</Button>
                     <Button x:Name="AddCurrentSheet" IsEnabled="{Binding AddCurrentSheetIsEnabled}" Grid.Column="3" Margin="5">Add Current Sheet</Button>
                     <Button x:Name="AddSheets" Grid.Column="4" Margin="5">Select Sheets</Button>
+                    <ComboBox x:Name="OpenDocuments" DisplayMemberPath="PathName" IsReadOnly="True"  Grid.Column="5"></ComboBox>
                 </Grid>
                 <DataGrid
                     x:Name="Sheets"
@@ -98,22 +100,6 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Sheet Number" Binding="{Binding Number}" MinWidth="100"></DataGridTextColumn>
                         <DataGridTextColumn Header="Sheet Name" Binding="{Binding Title}" Width="*"></DataGridTextColumn>
-                        <!--<DataGridComboBoxColumn
-                            SelectedItemBinding="{Binding SheetCategory}"
-                            Header="View Category"
-                            MinWidth="100">
-                            <DataGridComboBoxColumn.ElementStyle>
-                                <Style TargetType="ComboBox">
-                                    <Setter Property="ItemsSource" Value="{Binding SheetCategories}"/>
-                                    <Setter Property="IsReadOnly" Value="True"/>
-                                </Style>
-                            </DataGridComboBoxColumn.ElementStyle>
-                            <DataGridComboBoxColumn.EditingElementStyle>
-                                <Style TargetType="ComboBox">
-                                    <Setter Property="ItemsSource" Value="{Binding SheetCategories}"/>
-                                </Style>
-                            </DataGridComboBoxColumn.EditingElementStyle>
-                        </DataGridComboBoxColumn>-->
                         <DataGridTemplateColumn Header="View Category">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -121,6 +107,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Destination Model(advanced)" Binding="{Binding DestinationDocumentName}"></DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

@@ -1,4 +1,4 @@
-// (C) Copyright 2014-2016 by Andrew Nicholas
+// (C) Copyright 2014-2019 by Andrew Nicholas
 //
 // This file is part of SCaddins.
 //
@@ -66,6 +66,7 @@ namespace SCaddins.SheetCopier
             GetAllViewsInModel(existingViews, doc);
             this.GetFloorPlanViewFamilyTypeId();
             this.GetAllSheetCategories();
+            AllOpenDocuments = doc.Application.Documents.Cast<Document>().ToList();
         }
 
         public Document Doc
@@ -103,6 +104,10 @@ namespace SCaddins.SheetCopier
             {
                 return this.sheetCategories;
             }
+        }
+
+        public List<Document> AllOpenDocuments {
+            get; private set;             
         }
 
         public ObservableCollection<SheetCopierSheet> Sheets
@@ -235,9 +240,10 @@ namespace SCaddins.SheetCopier
         public ViewSheet AddEmptySheetToDocument(
             string sheetNumber,
             string sheetTitle,
-            string viewCategory)
+            string viewCategory,
+            Document destinationDocument)
         {
-            var result = ViewSheet.Create(this.doc, ElementId.InvalidElementId);
+            var result = ViewSheet.Create(destinationDocument, ElementId.InvalidElementId);
             result.Name = sheetTitle;
             result.SheetNumber = sheetNumber;
             var viewCategoryParamList = result.GetParameters(SheetCopierConstants.SheetCategory);
@@ -261,6 +267,14 @@ namespace SCaddins.SheetCopier
 
             // FIXME add error message,
         }
+
+        public void SetDestinationModel(Document destinationDocument)
+        {
+            foreach (var s in Sheets) {
+                s.DestinationDocument = destinationDocument;
+            }
+        }
+
 
         public void CopyElementsBetweenSheets(SheetCopierSheet sheet)
         {
@@ -313,7 +327,8 @@ namespace SCaddins.SheetCopier
             sheet.DestinationSheet = this.AddEmptySheetToDocument(
                 sheet.Number,
                 sheet.Title,
-                sheet.SheetCategory);
+                sheet.SheetCategory,
+                sheet.DestinationDocument);
 
             if (sheet.DestinationSheet != null) {
                 Debug.WriteLine(sheet.Number + " added to document.");

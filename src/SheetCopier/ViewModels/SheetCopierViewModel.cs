@@ -30,6 +30,7 @@ namespace SCaddins.SheetCopier.ViewModels
         private SheetCopierManager copyManager;
         private List<string> levelsInModel = new List<string>();
         private SheetCopierSheet selectedSheet;
+        private Autodesk.Revit.DB.Document selectedOpenDocument;
         private BindableCollection<SheetInformation> selectedSheetInformation = new BindableCollection<SheetInformation>();
         private List<SheetCopierSheet> selectedSheets = new List<SheetCopierSheet>();
         private List<SheetCopierViewOnSheet> selectedViews = new List<SheetCopierViewOnSheet>();
@@ -39,6 +40,7 @@ namespace SCaddins.SheetCopier.ViewModels
             copyManager = new SheetCopierManager(uidoc);
             levelsInModel = copyManager.Levels.Select(k => k.Key).ToList();
             RunAfterClose = false;
+            SelectedOpenDocument = uidoc.Document;
         }
 
         public static dynamic DefaultWindowSettings
@@ -154,6 +156,26 @@ namespace SCaddins.SheetCopier.ViewModels
             get
             {
                 return SelectedSheet.Number + " - " + SelectedSheet.Title;
+            }
+        }
+
+        public List<Autodesk.Revit.DB.Document> OpenDocuments
+        {
+            get
+            {
+                return copyManager.AllOpenDocuments;
+            }
+        }
+
+        public Autodesk.Revit.DB.Document SelectedOpenDocument {
+            get
+            {
+                return selectedOpenDocument;
+            }
+            set
+            {
+                selectedOpenDocument = value;
+                copyManager.SetDestinationModel(selectedOpenDocument);
             }
         }
 

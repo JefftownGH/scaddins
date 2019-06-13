@@ -30,6 +30,7 @@ namespace SCaddins.SheetCopier
         private string sheetCategory;
         private string userCreatedSheetCategory;
         private string title;
+        public Document destinationDocument;
         private ObservableCollection<SheetCopierViewOnSheet> viewsOnSheet;
 
         public SheetCopierSheet(string number, string title, SheetCopierManager scopy, ViewSheet sourceSheet)
@@ -49,6 +50,7 @@ namespace SCaddins.SheetCopier
             this.sheetCategory = this.GetSheetCategory(SheetCopierConstants.SheetCategory);
             this.userCreatedSheetCategory = sheetCategory;
             this.DestinationSheet = null;
+            this.DestinationDocument = sourceSheet.Document;
             this.viewsOnSheet = new ObservableCollection<SheetCopierViewOnSheet>();
             foreach (ElementId id in sourceSheet.GetAllPlacedViews())
             {
@@ -60,11 +62,32 @@ namespace SCaddins.SheetCopier
                 }
             }
             SheetCategories = new ObservableCollection<string>(scopy.SheetCategories.ToList());
+            AllOpenDocuments = scopy.AllOpenDocuments;
         }
 
         public ViewSheet DestinationSheet
         {
             get; set;
+        }
+
+        public Document DestinationDocument
+        {
+            get
+            {
+                return destinationDocument;
+            }
+            set
+            {
+                destinationDocument = value;
+                NotifyOfPropertyChange(() => DestinationDocumentName);
+            }
+        }
+
+        public string DestinationDocumentName {
+            get
+            {
+                return DestinationDocument.PathName;
+            }
         }
 
         public string Number
@@ -92,6 +115,10 @@ namespace SCaddins.SheetCopier
         public ObservableCollection<string> SheetCategories
         {
             get; 
+        }
+
+        public List<Document> AllOpenDocuments {
+            get;
         }
 
         public string UserCreatedSheetCategory {
